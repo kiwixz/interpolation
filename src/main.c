@@ -40,7 +40,8 @@ static void blend(IplImage *p, IplImage *n, float nfactor, IplImage *r)
   pfactor = 1 - nfactor;
 
   for (i = 0; i < r->imageSize; ++i)
-    r->imageData[i] = p->imageData[i] * pfactor + n->imageData[i] * nfactor;
+    r->imageData[i] = (unsigned char)p->imageData[i] * pfactor
+      + (unsigned char)n->imageData[i] * nfactor;
 }
 
 static int interpolate(double fps, CvVideoWriter *out,
@@ -146,13 +147,14 @@ int main(int argc, char *argv[])
     {
       IplImage *img;
 
-      img = cvQueryFrame(in);
+      img = cvCloneImage(bufimg);
+      bufimg = cvQueryFrame(in);
       progressbar(100 * i / len);
 
-      if (interpolate(fps, out, bufimg, img))
+      if (interpolate(fps, out, img, bufimg))
         return EXIT_FAILURE;
 
-      bufimg = img;
+      cvReleaseImage(&img);
     }
   cvWriteFrame(out, bufimg);
   progressbar(0);
