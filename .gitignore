@@ -3,6 +3,6 @@ bin/
 TODO
 exec
 
-.avi
-.mkv
-.mp4
+*.avi
+*.mkv
+*.mp4

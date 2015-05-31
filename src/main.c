@@ -113,11 +113,16 @@ int main(int argc, char *argv[])
   CvVideoWriter *out;
   IplImage      *bufimg;
 
-  in =
-    cvCaptureFromFile("/home/kiwixz/Documents/git/interpolation/vid.mp4");
+  if (argc != 3)
+    {
+      ERROR("Usage: interpolation source destination");
+      return EXIT_FAILURE;
+    }
+
+  in = cvCaptureFromFile(argv[1]);
   if (!in)
     {
-      ERROR("Failed to open for reading '%s'", "the file");
+      ERROR("Failed to open for reading '%s'", argv[1]);
       return EXIT_FAILURE;
     }
 
@@ -134,11 +139,10 @@ int main(int argc, char *argv[])
   len = cvGetCaptureProperty(in, CV_CAP_PROP_FRAME_COUNT);
 
   out =
-    cvCreateVideoWriter("/home/kiwixz/Documents/git/interpolation/out.mkv",
-                        CODEC, target, cvSize(width, height), 1);
+    cvCreateVideoWriter(argv[2], CODEC, target, cvSize(width, height), 1);
   if (!out)
     {
-      ERROR("Failed to open for writing '%s'", "the file");
+      ERROR("Failed to open for writing '%s'", argv[2]);
       return EXIT_FAILURE;
     }
 
