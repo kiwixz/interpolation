@@ -30,7 +30,11 @@
           __LINE__, ## __VA_ARGS__)
 
 #define CODEC CV_FOURCC('X', 'V', 'I', 'D')
-static const double target = 60.0;
+#define TMPFILE "/tmp/interpolation_vid.mkv"
+
+static const double TARGET = 60.0;
+static const char   AUDIOCMD[] =
+  "ffmpeg -i '"TMPFILE "' -i '%s' -c copy -y -v error '%s'";
 
 static void blend(IplImage *p, IplImage *n, float nfactor, IplImage *r)
 {
@@ -59,7 +63,7 @@ static int interpolate(double fps, CvVideoWriter *out,
       return -1;
     }
 
-  late += target / fps;
+  late += TARGET / fps;
   times = late;
   late -= times;
 
@@ -105,6 +109,24 @@ static void progressbar(int p)
     }
 }
 
+static int add_audio(char *src, char *dest)
+{
+  char *cmd;
+
+  cmd = malloc(sizeof(AUDIOCMD) - 2 * 2 + strlen(src) + strlen(dest));
+  if (!cmd)
+    {
+      ERROR("Failed to malloc command string");
+      return -1;
+    }
+
+  sprintf(cmd, AUDIOCMD, src, dest);
+  system(cmd);
+  free(cmd);
+
+  return 0;
+}
+
 int main(int argc, char *argv[])
 {
   double        fps;
@@ -127,10 +149,10 @@ int main(int argc, char *argv[])
     }
 
   fps = cvGetCaptureProperty(in, CV_CAP_PROP_FPS);
-  if (fps > target)
+  if (fps > TARGET)
     {
       ERROR("Video already has a framerate of %.2f (target was %.2f)",
-            fps, target);
+            fps, TARGET);
       return EXIT_FAILURE;
     }
 
@@ -138,11 +160,10 @@ int main(int argc, char *argv[])
   height = cvGetCaptureProperty(in, CV_CAP_PROP_FRAME_HEIGHT);
   len = cvGetCaptureProperty(in, CV_CAP_PROP_FRAME_COUNT);
 
-  out =
-    cvCreateVideoWriter(argv[2], CODEC, target, cvSize(width, height), 1);
+  out = cvCreateVideoWriter(TMPFILE, CODEC, TARGET, cvSize(width, height), 1);
   if (!out)
     {
-      ERROR("Failed to open for writing '%s'", argv[2]);
+      ERROR("Failed to open for writing '%s'", TMPFILE);
       return EXIT_FAILURE;
     }
 
@@ -165,6 +186,9 @@ int main(int argc, char *argv[])
 
   cvReleaseVideoWriter(&out);
   cvReleaseCapture(&in);
+
+  if (add_audio(argv[1], argv[2]))
+    return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
 }
