@@ -48,10 +48,10 @@ static void blend(IplImage *p, IplImage *n, float nfactor, IplImage *r)
       + (unsigned char)n->imageData[i] * nfactor;
 }
 
-static int interpolate(double fps, CvVideoWriter *out,
+static int interpolate(float k, CvVideoWriter *out,
                        IplImage *p, IplImage *n)
 {
-  static double late;
+  static float late;
 
   int      i, times;
   IplImage *img;
@@ -63,7 +63,7 @@ static int interpolate(double fps, CvVideoWriter *out,
       return -1;
     }
 
-  late += TARGET / fps;
+  late += k;
   times = late;
   late -= times;
 
@@ -130,6 +130,7 @@ static int add_audio(char *src, char *dest)
 int main(int argc, char *argv[])
 {
   double        fps;
+  float k;
   int           i, width, height, len;
   CvCapture     *in;
   CvVideoWriter *out;
@@ -167,6 +168,7 @@ int main(int argc, char *argv[])
       return EXIT_FAILURE;
     }
 
+  k = TARGET / fps;
   bufimg = cvQueryFrame(in);
   for (i = 1; i < len; ++i)
     {
@@ -176,7 +178,7 @@ int main(int argc, char *argv[])
       bufimg = cvQueryFrame(in);
       progressbar(100 * i / len);
 
-      if (interpolate(fps, out, img, bufimg))
+      if (interpolate(k, out, img, bufimg))
         return EXIT_FAILURE;
 
       cvReleaseImage(&img);
