@@ -48,10 +48,10 @@ static void blend(IplImage *p, IplImage *n, float nfactor, IplImage *r)
       + (unsigned char)n->imageData[i] * nfactor;
 }
 
-static int interpolate(float k, CvVideoWriter *out,
+static int interpolate(double k, CvVideoWriter *out,
                        IplImage *p, IplImage *n)
 {
-  static float late;
+  static double late;
 
   int      i, times;
   IplImage *img;
@@ -129,8 +129,7 @@ static int add_audio(char *src, char *dest)
 
 int main(int argc, char *argv[])
 {
-  double        fps;
-  float k;
+  double        fps, k;
   int           i, width, height, len;
   CvCapture     *in;
   CvVideoWriter *out;
