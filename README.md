@@ -9,7 +9,7 @@ This is a simple software to "frame-interpolate" videos using various algorithms
 ### Blending
 
 Fast and reliable, but not very efficient.
-[Example](http://youtu.be/slHTsSbHzRE)
+[Example](http://youtu.be/ySSamjEG6DE)
 
 ## What do I need ?
 
