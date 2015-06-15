@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd ..
+make all
+cd demo
+
+echo '
+Interpolating the example...'
+../bin/release/interpolation original.mp4 interpolated.mkv
