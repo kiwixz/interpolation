@@ -4,7 +4,12 @@
 
 ## Description
 
-This is a simple software to "frame-interpolate" videos.
+This is a simple software to "frame-interpolate" videos using various algorithms:
+
+### Blending
+
+Fast and reliable, but not very efficient.
+[Example](http://youtu.be/slHTsSbHzRE)
 
 ## What do I need ?
 
