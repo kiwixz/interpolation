@@ -1,6 +1,6 @@
 # interpolation
 
-[Feel free to contact me by email.](mailto:kiwixz@users.noreply.github.com)
+Feel free to contact me by email.
 
 ## Description
 
@@ -27,3 +27,6 @@ make all
 ```
 
 *Usage: interpolation _source_ _destination_*
+
+## License
+This program is protected by the **GNU GENERAL PUBLIC LICENSE**. This repositery should contain a file named _LICENSE_.
