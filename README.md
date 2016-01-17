@@ -4,7 +4,7 @@ Feel free to contact me by email.
 
 ## Description
 
-This is a simple software to "frame-interpolate" videos using various algorithms:
+This is a simple software to "frame-interpolate" videos using only one algorithm, for now:
 
 ### Blending
 
